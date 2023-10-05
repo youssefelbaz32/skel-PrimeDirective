@@ -27,7 +27,19 @@ public class PrimeFactorSequence {
      */
     public List<Integer> primeFactorSequence() {
         List<Integer> seq = new ArrayList<>();
-        // TODO: Implement this method
+        seq.add(0);
+        seq.add(0);
+        for (int i = 2; i < upperBound + 1; i++) {
+            int counter = 0;
+            int num = i;
+            for (int prime: primes) {
+                while (num % prime == 0 && num != 1) {
+                    num = num/prime;
+                    counter++;
+                }
+            }
+            seq.add(counter);
+        }
         return seq;
     }
 
@@ -41,7 +53,14 @@ public class PrimeFactorSequence {
      */
     public List<Integer> numbersWithMPrimeFactors(int m) {
         List<Integer> seq = new ArrayList<>();
-        // TODO: Implement this method
+        List<Integer> seq2 = new ArrayList<>();
+        seq2 = primeFactorSequence();
+
+        for (int i = 0; i <= upperBound; i++) {
+            if (seq2.get(i).equals(m) ) {
+                seq.add(i);
+            }
+        }
         return seq;
     }
 
@@ -59,7 +78,13 @@ public class PrimeFactorSequence {
      */
     public List<IntPair> numbersWithMPrimeFactorsAndSmallGap(int m, int gap) {
         List<IntPair> listOfPairs = new ArrayList<>();
-        // TODO: Implement this method
+        List <Integer> seq = new ArrayList<>();
+        seq = numbersWithMPrimeFactors(m);
+        for (int i = 0; i < seq.size() - 1; i++) {
+            if ( (seq.get(i+1) - seq.get(i)) <= gap ) {
+                listOfPairs.add(new IntPair(seq.get(i+1),seq.get(i)));
+            }
+        }
         return listOfPairs;
     }
 
@@ -75,9 +100,66 @@ public class PrimeFactorSequence {
      * @param n the number to transform
      * @return a string representation of the smallest transformation sequence
      */
+
+
+
+
     public String changeToPrime(int n) {
-        // TODO: Implement this method
-        return "-";
+
+        if (isPrime(n) && n <= upperBound) {
+            return "";
+        }
+
+        if (n >= upperBound) {
+            return "-";
+        }
+
+//        for (int i = 0; i < ??????????????????????????////)
+
+
+        String path0 = "0" + changeToPrime(2*n + 1);
+
+        String path1 = "1" + changeToPrime(n + 1) ;
+
+            if (path0.contains("-") && path1.contains("-")) {
+                return "-";
+            } else if (path0.contains("-")) {
+                return path1;
+            } else if (path1.contains("-")) {
+                return path0;
+            }
+
+            if (path0.length() < path1.length() ) {
+                return path0;
+            } else if (path1.length() < path0.length() ) {
+                return path1;
+            } else {
+                return (stringsum(path1) >= stringsum(path0) ? path0:path1);
+                }
+            }
+
+
+
+
+
+
+        private int stringsum (String n) {
+        int decimalNumber = Integer.parseInt(n, 2);
+        return decimalNumber;
+        }
+
+
+
+    private boolean isPrime(int n) {
+        if (n <= 1) {
+            return false;
+        }
+        for (int i = 2; i <= Math.sqrt(n); i++) {
+            if (n % i == 0) {
+                return false;
+            }
+        }
+        return true;
     }
 
 }
